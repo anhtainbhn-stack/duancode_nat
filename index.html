@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Website</title>
+    <style>
+      :root {
+        --bg: #12161a;
+        --panel: #1a2126;
+        --panel-2: #1f272d;
+        --line: #2c363d;
+        --line-bright: #445059;
+        --text: #eef1ee;
+        --text-dim: #9aa7ac;
+        --amber: #e8963c;
+        --amber-dim: #6b4d29;
+        --cyan: #5fd1c9;
+        --cyan-dim: #2b4d49;
+        --red: #d9694f;
+        --radius-s: 3px;
+        --radius-m: 6px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      .display {
+        font-family: "Archivo Expanded", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        line-height: 1.05;
+      }
+      .mono {
+        font-family: "Space Mono", monospace;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 0 20px;
+        }
+      }
+
+      /* circuit trace background texture */
+      .traces {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        opacity: 0.55;
+      }
+      .traces svg {
+        position: absolute;
+      }
+
+      /* ---------- Header ---------- */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(18, 22, 26, 0.88);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Archivo Expanded", sans-serif;
+        font-weight: 800;
+        font-size: 19px;
+        color: var(--text);
+      }
+      .logo .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--amber);
+        box-shadow: 0 0 8px var(--amber);
+      }
+      .navlinks {
+        display: flex;
+        gap: 34px;
+        font-size: 14.5px;
+        color: var(--text-dim);
+      }
+      .navlinks a:hover {
+        color: var(--text);
+      }
+      .navcta {
+        background: var(--amber);
+        color: #1a1108;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 18px;
+        border-radius: var(--radius-s);
+        border: 1px solid var(--amber);
+      }
+      .navcta:hover {
+        background: #f0a655;
+      }
+      .navmobile {
+        display: none;
+      }
+      @media (max-width: 860px) {
+        .navlinks {
+          display: none;
+        }
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        position: relative;
+        padding: 84px 0 96px;
+        border-bottom: 1px solid var(--line);
+        overflow: hidden;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 56px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .eyebrow-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 22px;
+        color: var(--cyan);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      .eyebrow-line .bar {
+        width: 22px;
+        height: 1px;
+        background: var(--cyan);
+      }
+      .hero h1 {
+        font-size: 52px;
+        color: var(--text);
+        max-width: 560px;
+      }
+      @media (max-width: 640px) {
+        .hero h1 {
+          font-size: 36px;
+        }
+      }
+      .hero h1 .accent {
+        color: var(--amber);
+      }
+      .hero p.lead {
+        margin-top: 22px;
+        color: var(--text-dim);
+        font-size: 17px;
+        max-width: 480px;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        margin-top: 34px;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: var(--amber);
+        color: #1a1108;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 14px 24px;
+        border-radius: var(--radius-s);
+        border: 1px solid var(--amber);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-primary:hover {
+        background: #f0a655;
+      }
+      .btn-ghost {
+        border: 1px solid var(--line-bright);
+        color: var(--text);
+        font-size: 15px;
+        font-weight: 500;
+        padding: 14px 22px;
+        border-radius: var(--radius-s);
+      }
+      .btn-ghost:hover {
+        border-color: var(--cyan);
+        color: var(--cyan);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 44px;
+        flex-wrap: wrap;
+      }
+      .stat .num {
+        font-family: "Archivo Expanded", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .stat .lbl {
+        font-size: 12.5px;
+        color: var(--text-dim);
+        margin-top: 2px;
+      }
+
+      /* diagnostic ticket panel */
+      .ticket {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-m);
+        padding: 0;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+      }
+      .ticket-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+      .ticket-head .mono {
+        font-size: 12px;
+        color: var(--text-dim);
+      }
+      .ticket-status {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--cyan);
+      }
+      .ticket-status .blip {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cyan);
+        animation: blip 1.6s infinite;
+      }
+      @keyframes blip {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.25;
+        }
+      }
+      .ticket-body {
+        padding: 22px 20px;
+      }
+      .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 14px;
+      }
+      .ticket-row:last-child {
+        border-bottom: none;
+      }
+      .ticket-row .k {
+        color: var(--text-dim);
+      }
+      .ticket-row .v {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .ticket-row .v.ok {
+        color: var(--cyan);
+      }
+      .ticket-row .v.warn {
+        color: var(--amber);
+      }
+      .meter {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+      .meter .lbl-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-dim);
+        margin-bottom: 8px;
+      }
+      .meter-track {
+        height: 6px;
+        background: var(--panel-2);
+        border-radius: 3px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+      .meter-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--cyan), var(--amber));
+        width: 82%;
+        border-radius: 3px;
+      }
+
+      /* ---------- Section shell ---------- */
+      section {
+        padding: 96px 0;
+        border-bottom: 1px solid var(--line);
+        position: relative;
+      }
+      .section-head {
+        max-width: 600px;
+        margin-bottom: 52px;
+      }
+      .kicker {
+        font-family: "Space Mono", monospace;
+        font-size: 12.5px;
+        color: var(--cyan);
+        margin-bottom: 14px;
+      }
+      .section-head h2 {
+        font-size: 34px;
+        color: var(--text);
+      }
+      @media (max-width: 640px) {
+        .section-head h2 {
+          font-size: 27px;
+        }
+      }
+      .section-head p {
+        color: var(--text-dim);
+        margin-top: 14px;
+        font-size: 15.5px;
+        max-width: 520px;
+      }
+
+      /* ---------- Services ---------- */
+      .svc-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+      }
+      @media (max-width: 860px) {
+        .svc-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 560px) {
+        .svc-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .svc-card {
+        background: var(--panel);
+        padding: 30px 26px;
+        position: relative;
+      }
+      .svc-card .idx {
+        font-family: "Space Mono", monospace;
+        font-size: 12px;
+        color: var(--line-bright);
+        margin-bottom: 20px;
+      }
+      .svc-card h3 {
+        font-size: 18px;
+        color: var(--text);
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .svc-card p {
+        font-size: 14px;
+        color: var(--text-dim);
+      }
+      .svc-card .tag {
+        display: inline-block;
+        margin-top: 16px;
+        font-size: 11.5px;
+        padding: 4px 9px;
+        border: 1px solid var(--amber-dim);
+        color: var(--amber);
+        border-radius: 20px;
+      }
+
+      /* ---------- Process (legit sequence) ---------- */
+      .process {
+        position: relative;
+      }
+      .proc-list {
+        display: flex;
+        flex-direction: column;
+      }
+      .proc-item {
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        gap: 24px;
+        padding: 28px 0;
+        border-top: 1px solid var(--line);
+      }
+      .proc-item:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .proc-num {
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        color: var(--amber);
+        padding-top: 2px;
+      }
+      .proc-content h3 {
+        font-size: 19px;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .proc-content p {
+        color: var(--text-dim);
+        font-size: 14.5px;
+        max-width: 560px;
+      }
+
+      /* ---------- Pricing ---------- */
+      .price-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-m);
+        overflow: hidden;
+      }
+      .price-table th {
+        text-align: left;
+        font-size: 12px;
+        color: var(--text-dim);
+        font-weight: 600;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--line);
+        font-family: "Space Mono", monospace;
+        font-weight: 400;
+      }
+      .price-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--line);
+        font-size: 14.5px;
+      }
+      .price-table tr:last-child td {
+        border-bottom: none;
+      }
+      .price-table td.device {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .price-table td.range {
+        color: var(--cyan);
+        font-family: "Space Mono", monospace;
+        font-size: 13.5px;
+      }
+      .price-table td.time {
+        color: var(--text-dim);
+      }
+      .price-note {
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      /* ---------- Testimonials ---------- */
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 860px) {
+        .test-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .test-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-m);
+        padding: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .test-quote {
+        font-size: 14.5px;
+        color: var(--text);
+        line-height: 1.6;
+      }
+      .test-who {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12.5px;
+        color: var(--text-dim);
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+      .test-who .device {
+        color: var(--amber);
+        font-family: "Space Mono", monospace;
+        font-size: 11.5px;
+      }
+
+      /* ---------- CTA / Contact ---------- */
+      .contact {
+        border-bottom: none;
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 56px;
+      }
+      @media (max-width: 860px) {
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .info-row {
+        display: flex;
+        gap: 16px;
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+      }
+      .info-row:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .info-row .k {
+        width: 110px;
+        flex-shrink: 0;
+        font-size: 12.5px;
+        color: var(--text-dim);
+        font-family: "Space Mono", monospace;
+        padding-top: 2px;
+      }
+      .info-row .v {
+        font-size: 15px;
+        color: var(--text);
+      }
+      .info-row .v span {
+        display: block;
+        color: var(--text-dim);
+        font-size: 13px;
+        margin-top: 2px;
+      }
+
+      .form-panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-m);
+        padding: 30px;
+      }
+      .form-panel h3 {
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+      .form-panel p {
+        font-size: 13.5px;
+        color: var(--text-dim);
+        margin-bottom: 22px;
+      }
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        font-size: 12.5px;
+        color: var(--text-dim);
+        margin-bottom: 7px;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        color: var(--text);
+        padding: 12px 14px;
+        border-radius: var(--radius-s);
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        outline: none;
+        border-color: var(--cyan);
+      }
+      .field textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .submit-btn {
+        width: 100%;
+        background: var(--amber);
+        color: #1a1108;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px;
+        border: none;
+        border-radius: var(--radius-s);
+        cursor: pointer;
+        margin-top: 6px;
+      }
+      .submit-btn:hover {
+        background: #f0a655;
+      }
+
+      /* ---------- Footer ---------- */
+      footer {
+        padding: 40px 0;
+      }
+      .foot-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .foot-row .logo {
+        font-size: 16px;
+      }
+      .foot-links {
+        display: flex;
+        gap: 26px;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+      .foot-links a:hover {
+        color: var(--text);
+      }
+      .foot-copy {
+        font-size: 12.5px;
+        color: var(--line-bright);
+        margin-top: 24px;
+        font-family: "Space Mono", monospace;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ticket-status .blip {
+          animation: none;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <div class="logo"><span class="dot"></span>MẠCH SỐ ANH TAI 35</div>
+        <nav class="navlinks">
+          <a href="#dichvu">Dịch vụ</a>
+          <a href="#quytrinh">Quy trình</a>
+          <a href="#bangia">Bảng giá</a>
+          <a href="#danhgia">Đánh giá</a>
+          <a href="#lienhe">Liên hệ</a>
+        </nav>
+        <a href="#lienhe" class="navcta">Đặt lịch sửa chữa</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="traces" aria-hidden="true">
+        <svg
+          width="700"
+          height="700"
+          style="top: -120px; right: -160px"
+          viewBox="0 0 700 700"
+          fill="none"
+        >
+          <path
+            d="M50 100 H300 V250 H500 V500"
+            stroke="#2c363d"
+            stroke-width="1.5"
+          />
+          <path
+            d="M120 40 V180 H420 V420 H620"
+            stroke="#2c363d"
+            stroke-width="1.5"
+          />
+          <path d="M0 350 H180 V550 H380" stroke="#2c363d" stroke-width="1.5" />
+          <circle cx="300" cy="250" r="4" fill="#445059" />
+          <circle cx="500" cy="250" r="4" fill="#445059" />
+          <circle cx="420" cy="180" r="4" fill="#445059" />
+          <circle cx="180" cy="550" r="4" fill="#445059" />
+          <circle cx="620" cy="420" r="4" fill="#445059" />
+        </svg>
+      </div>
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow-line">
+            <span class="bar"></span>Trung tâm sửa chữa điện tử <em>ANH TAI</em>
+          </div>
+          <h1>
+            Chẩn đoán đúng bệnh.<br />Sửa <span class="accent">tận gốc</span>,
+            không sửa tạm.
+          </h1>
+          <p class="lead">
+            Điện thoại, laptop, tivi hay đồ gia dụng — kỹ thuật viên của chúng
+            tôi kiểm tra bo mạch tận nơi, báo giá rõ ràng trước khi động tay, và
+            chỉ trả máy khi mọi chỉ số đã ổn định.
+          </p>
+          <div class="hero-actions">
+            <a href="#lienhe" class="btn-primary"
+              >Đặt lịch kiểm tra miễn phí →</a
+            >
+            <a href="#quytrinh" class="btn-ghost">Xem quy trình sửa chữa</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="num">11 năm</div>
+              <div class="lbl">kinh nghiệm sửa chữa</div>
+            </div>
+            <div class="stat">
+              <div class="num">96%</div>
+              <div class="lbl">sửa xong trong ngày</div>
+            </div>
+            <div class="stat">
+              <div class="num">6 tháng</div>
+              <div class="lbl">bảo hành linh kiện thay</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ticket">
+          <div class="ticket-head">
+            <span class="mono">PHIẾU #A-1042</span>
+            <span class="ticket-status"
+              ><span class="blip"></span>Đang chẩn đoán</span
+            >
+          </div>
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span class="k">Thiết bị</span
+              ><span class="v">Laptop — Dell XPS 13</span>
+            </div>
+            <div class="ticket-row">
+              <span class="k">Triệu chứng</span
+              ><span class="v">Không lên nguồn</span>
+            </div>
+            <div class="ticket-row">
+              <span class="k">Nguồn / mạch sạc</span
+              ><span class="v ok">Đạt chuẩn</span>
+            </div>
+            <div class="ticket-row">
+              <span class="k">IC nguồn</span
+              ><span class="v warn">Cần thay thế</span>
+            </div>
+            <div class="ticket-row">
+              <span class="k">Pin</span><span class="v ok">82% dung lượng</span>
+            </div>
+            <div class="meter">
+              <div class="lbl-row">
+                <span>Tiến độ chẩn đoán</span><span>82%</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dichvu">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">// 01 — DỊCH VỤ</div>
+          <h2>Một xưởng, đủ đồ nghề cho mọi thiết bị</h2>
+          <p>
+            Mỗi nhóm thiết bị có một bàn sửa và bộ công cụ riêng, từ máy khò
+            linh kiện SMD đến máy đo ESR — không dùng chung một quy trình cho
+            tất cả.
+          </p>
+        </div>
+        <div class="svc-grid">
+          <div class="svc-card">
+            <div class="idx mono">01</div>
+            <h3>Điện thoại &amp; Tablet</h3>
+            <p>
+              Thay màn hình, pin, chân sạc, ép kính; xử lý vào nước, mất nguồn,
+              lỗi IC nguồn/sạc ở cấp linh kiện.
+            </p>
+            <span class="tag">Lấy trong 2–4 giờ</span>
+          </div>
+          <div class="svc-card">
+            <div class="idx mono">02</div>
+            <h3>Laptop &amp; PC</h3>
+            <p>
+              Vệ sinh tản nhiệt, thay bản lề &amp; bàn phím, khắc phục không lên
+              nguồn, chập nguồn, lỗi RAM/ổ cứng.
+            </p>
+            <span class="tag">Kiểm tra miễn phí</span>
+          </div>
+          <div class="svc-card">
+            <div class="idx mono">03</div>
+            <h3>Tivi &amp; Màn hình</h3>
+            <p>
+              Thay tấm nền, dàn đèn nền, mạch nguồn; xử lý màn hình sọc, mất
+              hình, không nhận tín hiệu.
+            </p>
+            <span class="tag">Bảo hành 6 tháng</span>
+          </div>
+          <div class="svc-card">
+            <div class="idx mono">04</div>
+            <h3>Đồ gia dụng điện tử</h3>
+            <p>
+              Nồi cơm điện, máy giặt, lò vi sóng — sửa bo mạch điều khiển, cảm
+              biến nhiệt, mô-tơ.
+            </p>
+            <span class="tag">Nhận tại nhà</span>
+          </div>
+          <div class="svc-card">
+            <div class="idx mono">05</div>
+            <h3>Sửa cấp linh kiện</h3>
+            <p>
+              Hàn lại chip, thay IC, dò mạch bằng kính hiển vi cho các lỗi mà kỹ
+              thuật thông thường bỏ qua.
+            </p>
+            <span class="tag">Chuyên sâu</span>
+          </div>
+          <div class="svc-card">
+            <div class="idx mono">06</div>
+            <h3>Khôi phục dữ liệu</h3>
+            <p>
+              Cứu dữ liệu từ ổ cứng hỏng, thẻ nhớ lỗi, điện thoại không lên
+              nguồn — trước khi tiến hành sửa chữa.
+            </p>
+            <span class="tag">Ưu tiên an toàn</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quytrinh" class="process">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">// 02 — QUY TRÌNH</div>
+          <h2>5 bước, từ lúc nhận máy đến lúc bàn giao</h2>
+          <p>
+            Bạn theo dõi được thiết bị của mình đang ở bước nào, không có công
+            đoạn nào bị giấu.
+          </p>
+        </div>
+        <div class="proc-list">
+          <div class="proc-item">
+            <div class="proc-num">01</div>
+            <div class="proc-content">
+              <h3>Tiếp nhận &amp; chẩn đoán miễn phí</h3>
+              <p>
+                Kỹ thuật viên kiểm tra thiết bị ngay tại quầy hoặc từ xa qua
+                video, xác định đúng nguyên nhân trước khi báo giá.
+              </p>
+            </div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-num">02</div>
+            <div class="proc-content">
+              <h3>Báo giá minh bạch</h3>
+              <p>
+                Bạn nhận báo giá chi tiết theo từng hạng mục — linh kiện và công
+                sửa tách riêng — và chỉ trả tiền cho phần bạn đồng ý.
+              </p>
+            </div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-num">03</div>
+            <div class="proc-content">
+              <h3>Tiến hành sửa chữa</h3>
+              <p>
+                Thay thế hoặc hàn lại linh kiện đúng chuẩn nhà sản xuất, dùng
+                linh kiện chính hãng hoặc tương đương đã kiểm định.
+              </p>
+            </div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-num">04</div>
+            <div class="proc-content">
+              <h3>Kiểm tra vận hành</h3>
+              <p>
+                Chạy thử ít nhất 30 phút dưới tải để đảm bảo không còn lỗi ẩn
+                trước khi thông báo cho bạn đến nhận máy.
+              </p>
+            </div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-num">05</div>
+            <div class="proc-content">
+              <h3>Bàn giao &amp; bảo hành</h3>
+              <p>
+                Nhận máy kèm phiếu bảo hành ghi rõ hạng mục đã sửa và thời hạn —
+                hỗ trợ kiểm tra lại miễn phí nếu tái phát.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bangia">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">// 03 — BẢNG GIÁ THAM KHẢO</div>
+          <h2>Chi phí trung bình theo hạng mục</h2>
+          <p>
+            Giá thực tế phụ thuộc vào dòng máy và mức độ hư hỏng, sẽ được chốt
+            sau khi kiểm tra trực tiếp.
+          </p>
+        </div>
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Hạng mục</th>
+              <th>Khoảng giá</th>
+              <th>Thời gian</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="device">Thay màn hình điện thoại</td>
+              <td class="range">400.000 – 1.800.000đ</td>
+              <td class="time">2–4 giờ</td>
+            </tr>
+            <tr>
+              <td class="device">Thay pin điện thoại / laptop</td>
+              <td class="range">250.000 – 900.000đ</td>
+              <td class="time">1–2 giờ</td>
+            </tr>
+            <tr>
+              <td class="device">Sửa lỗi không lên nguồn (laptop)</td>
+              <td class="range">300.000 – 1.500.000đ</td>
+              <td class="time">1–3 ngày</td>
+            </tr>
+            <tr>
+              <td class="device">Vệ sinh tản nhiệt + keo tản nhiệt</td>
+              <td class="range">150.000 – 300.000đ</td>
+              <td class="time">1–2 giờ</td>
+            </tr>
+            <tr>
+              <td class="device">Thay tấm nền tivi</td>
+              <td class="range">1.200.000 – 4.500.000đ</td>
+              <td class="time">2–3 ngày</td>
+            </tr>
+            <tr>
+              <td class="device">Sửa bo mạch máy giặt / nồi cơm</td>
+              <td class="range">200.000 – 700.000đ</td>
+              <td class="time">1–2 ngày</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="price-note">
+          Chẩn đoán luôn miễn phí — bạn chỉ trả tiền khi đồng ý báo giá và tiến
+          hành sửa.
+        </p>
+      </div>
+    </section>
+
+    <section id="danhgia">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">// 04 — ĐÁNH GIÁ</div>
+          <h2>Khách hàng nói gì sau khi nhận máy</h2>
+        </div>
+        <div class="test-grid">
+          <div class="test-card">
+            <p class="test-quote">
+              Laptop bị vào nước tưởng phải bỏ, mang đến đây được báo rõ từng
+              linh kiện hỏng và chi phí trước khi sửa. Máy chạy lại êm như mới.
+            </p>
+            <div class="test-who">
+              <span>Anh Minh Quân</span><span class="device">MacBook Pro</span>
+            </div>
+          </div>
+          <div class="test-card">
+            <p class="test-quote">
+              Tivi nhà mình bị sọc màn hình, gọi hai chỗ khác đều bảo phải mua
+              tivi mới. Ở đây thay được tấm nền, giá rẻ hơn nhiều so với mua máy
+              mới.
+            </p>
+            <div class="test-who">
+              <span>Chị Thu Hà</span><span class="device">Samsung 55"</span>
+            </div>
+          </div>
+          <div class="test-card">
+            <p class="test-quote">
+              Điện thoại rớt vào bồn rửa, tưởng mất hết dữ liệu ảnh cưới. Kỹ
+              thuật viên ưu tiên cứu dữ liệu trước rồi mới sửa nguồn, mình rất
+              yên tâm.
+            </p>
+            <div class="test-who">
+              <span>Anh Đức Anh</span><span class="device">iPhone 13</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lienhe" class="contact">
+      <div class="wrap contact-grid">
+        <div>
+          <div class="kicker">// 05 — LIÊN HỆ</div>
+          <h2 style="font-size: 30px; margin-bottom: 8px">
+            Mang máy đến, hoặc để chúng tôi đến chỗ bạn
+          </h2>
+          <p
+            style="color: var(--text-dim); font-size: 15px; margin-bottom: 8px"
+          >
+            Với đồ gia dụng cồng kềnh, kỹ thuật viên có thể kiểm tra và sửa tại
+            nhà.
+          </p>
+
+          <div class="info-row">
+            <div class="k">ĐỊA CHỈ</div>
+            <div class="v">
+              1383 Đường Chánh Hưng, Phường Bình Chánh<br /><span
+                >TP. Hồ Chí Minh</span
+              >
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="k">ĐIỆN THOẠI</div>
+            <div class="v">
+              0392 306 058<span>Hỗ trợ tư vấn nhanh qua Zalo</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="k">GIỜ MỞ CỬA</div>
+            <div class="v">
+              8:00 – 20:30, cả Thứ Bảy &amp; Chủ Nhật<span
+                >Nhận máy ngoài giờ theo hẹn trước</span
+              >
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="k">SỬA TẠI NHÀ</div>
+            <div class="v">
+              Trong bán kính 10km<span
+                >Áp dụng cho tivi, máy giặt, đồ gia dụng lớn</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-panel">
+          <h3>Đặt lịch kiểm tra miễn phí</h3>
+          <p>
+            Điền thông tin, kỹ thuật viên sẽ gọi lại trong vòng 15 phút để xác
+            nhận lịch hẹn.
+          </p>
+          <form
+            onsubmit="
+              event.preventDefault();
+              this.querySelector('.submit-btn').textContent =
+                'Đã gửi — sẽ liên hệ sớm';
+            "
+          >
+            <div class="field">
+              <label for="name">Họ tên</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Nguyễn Văn A"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="phone">Số điện thoại</label>
+              <input
+                id="phone"
+                type="tel"
+                placeholder="09xx xxx xxx"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="device">Loại thiết bị</label>
+              <select id="device">
+                <option>Điện thoại / Tablet</option>
+                <option>Laptop / PC</option>
+                <option>Tivi / Màn hình</option>
+                <option>Đồ gia dụng điện tử</option>
+                <option>Khác</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="issue">Mô tả sự cố</label>
+              <textarea
+                id="issue"
+                placeholder="Ví dụ: máy không lên nguồn sau khi sạc qua đêm"
+              ></textarea>
+            </div>
+            <button class="submit-btn" type="submit">Gửi yêu cầu</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot-row">
+          <div class="logo">
+            <span
+              class="dot"
+              style="
+                background: var(--amber);
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                display: inline-block;
+                margin-right: 8px;
+              "
+            ></span
+            >MẠCH SỐ
+          </div>
+          <div class="foot-links">
+            <a href="#dichvu">Dịch vụ</a>
+            <a href="#quytrinh">Quy trình</a>
+            <a href="#bangia">Bảng giá</a>
+            <a href="#lienhe">Liên hệ</a>
+          </div>
+        </div>
+        <div class="foot-copy">
+          © 2026 MẠCH SỐ — Trung tâm sửa chữa điện tử ANH TAI. Toàn bộ nội dung
+          mang tính minh họa.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
